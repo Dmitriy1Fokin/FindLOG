@@ -26,18 +26,21 @@ public class GUIBuild {
         backLeft.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
         whatField = new JTextField("Enter text to find",20);
-        whatField.addMouseListener(clickListener);
-        //whatField.addActionListener(new whatFieldListener());
+        //whatField.addMouseListener(whatFieldListener);
         formatField = new JTextField("*.log",20);
 
+
         disk = new JRadioButton("find in PC", true);
+        disk.addActionListener(new diskListener());
         disk.setSelected(true);
         web = new JRadioButton("find in web");
+        web.addActionListener(new webListener());
         ButtonGroup radioGroup = new ButtonGroup();
         radioGroup.add(disk);
         radioGroup.add(web);
 
-        whereField = new JTextField(20);
+        whereField = new JTextField("Click here to choose a folder",20);
+        whereField.addMouseListener(whereFieldListener);
 
         backLeft.add(whatField);
         backLeft.add(formatField);
@@ -59,9 +62,25 @@ public class GUIBuild {
 
     }
 
-    MouseListener clickListener = new MouseAdapter() {
+    MouseListener whatFieldListener = new MouseAdapter() {
         public void mouseClicked(MouseEvent me) {
-            ((JTextField) me.getSource()).selectAll();
+            System.out.println(me.getButton());
+            if((me.getButton() == 1) || (whatField.getText() == "Enter text to find")){
+                ((JTextField) me.getSource()).selectAll();
+
+            }
+        }
+    };
+
+    MouseListener whereFieldListener = new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (disk.isSelected()){
+                whereField.setText("1");
+            }
+            if (web.isSelected()){
+                whereField.setText("2");
+            }
         }
     };
 
@@ -70,6 +89,18 @@ public class GUIBuild {
         public void actionPerformed(ActionEvent ev){
             System.exit(1);
 
+        }
+    }
+
+    public class diskListener implements ActionListener{
+        public void actionPerformed(ActionEvent ev){
+            whereField.setText("Click here to choose a folder");
+        }
+    }
+
+    public class webListener implements ActionListener{
+        public void actionPerformed(ActionEvent ev){
+            whereField.setText("Click here to choose a web");
         }
     }
 
